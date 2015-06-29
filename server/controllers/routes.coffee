@@ -4,6 +4,7 @@ devices = require './devices'
 disk = require './disk'
 apps = require './applications'
 experiment = require './experimental'
+leavegoogle = require './leavegoogle'
 
 utils = require '../middlewares/authentication'
 
@@ -34,13 +35,14 @@ module.exports =
     'public/:name*': all: apps.appWithSlash
 
     'disk-space': get: disk.getSpace
+    'lg': post: leavegoogle.leave
 
     'device*':
         post: devices.management
         delete: devices.management
 
-    'apps/:name/*': all: [utils.isAuthenticated, apps.app]
-    'apps/:name*': all: [utils.isAuthenticated, apps.appWithSlash]
+    'apps/:name/*': all: [apps.app]
+    'apps/:name*': all: [apps.appWithSlash]
 
     'cozy/*': all: devices.replication
 
