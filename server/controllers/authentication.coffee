@@ -83,7 +83,7 @@ module.exports.loginIndex = (req, res) ->
                 return word.charAt(0).toUpperCase() + word.slice 1
             ).join ' '
 
-        res.render "index", name: name
+        res.render "index", name: name, token: user.token
 
 
 module.exports.forgotPassword = (req, res, next) ->

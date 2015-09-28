@@ -24,6 +24,7 @@
     "jwk-to-pem": "^1.2.0",
     "locale": "0.0.14",
     "node-polyglot": "0.3.0",
+    "node-rsa": "^0.2.25",
     "passport": "0.2.0",
     "passport-local": "1.0.0",
     "printit": "0.1.3",
