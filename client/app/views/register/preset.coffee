@@ -42,7 +42,7 @@ module.exports = class RegisterPresetView extends FormView
 
     handleSubmit: ->
         @form
-        .filter => @model.get('step').map (cur) -> cur is 'preset'
+        .filter @onStep
         .flatMap (form) ->
             if form.autkeys
                 keys = window.crypto.subtle.generateKey
@@ -73,6 +73,11 @@ module.exports = class RegisterPresetView extends FormView
     onRender: ->
         @initForm()
         @initErrors()
+
+        # Step valve
+        @onStep = @model.get('step').sampledBy(@form).map (step) ->
+            step is 'preset'
+        .toProperty()
 
         # Set the next button enable state when all required fields are filled
         @model.nextEnabled.plug @required.changes()
