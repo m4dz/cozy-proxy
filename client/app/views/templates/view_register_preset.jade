@@ -27,7 +27,6 @@ p#preset-password-tip.tips
     label.checkbox(for="preset-authkeys", aria-describedby="preset-authkeys-tip")
         input#preset-authkeys(type="checkbox", name="autkeys", checked=this.crypto.subtle? 'true' : 'false', disabled=!this.crypto.subtle)
         span= t('preset authkeys')
-        input#preset-authkeys-pubkey(type="hidden", name="pubkey")
     p#preset-authkeys-tip.tips
         = t('preset authkeys tip')
 

@@ -7,6 +7,7 @@ region to host form feedbacks (state-machine `alert` property).
 ###
 
 FeedbackView = require 'views/auth/feedback'
+btoabuffer = require 'lib/base64-arraybuffer'
 
 
 module.exports = class AuthView extends Mn.LayoutView
@@ -50,6 +51,8 @@ module.exports = class AuthView extends Mn.LayoutView
     - properties extracted from streams
     ###
     initialize: ->
+        @initAuthkeys() if localStorage.privateKey
+
         # Create property for password input, delegated from the input element
         # events, mapped to its value
         password = @$el.asEventStream 'focus keyup blur', @ui.passwd
@@ -140,3 +143,25 @@ module.exports = class AuthView extends Mn.LayoutView
         @model.alert
             .assign @ui.passwd[0], 'select'
 
+
+    initAuthkeys: ->
+        token      = $('meta[name="authtoken"]').attr('content')
+        privateKey = JSON.parse localStorage.privateKey
+
+        auth = window.crypto.subtle.importKey 'jwk', privateKey,
+            name: "RSA-OAEP"
+            hash: name: "SHA-256"
+        , false
+        , ['decrypt']
+
+        .then (key) ->
+            window.crypto.subtle.decrypt
+                name: "RSA-OAEP"
+            , key
+            , btoabuffer.decode token
+
+        .then (data) =>
+            password: atob btoabuffer.encode data
+            action: @options.backend
+
+        @model.signin.plug Bacon.fromPromise auth

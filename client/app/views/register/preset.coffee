@@ -4,7 +4,9 @@ Presets view
 This view display the form for the preset step
 ###
 
-FormView = require 'views/lib/form_view'
+FormView   = require 'views/lib/form_view'
+btoabuffer = require 'lib/base64-arraybuffer'
+
 
 
 module.exports = class RegisterPresetView extends FormView
@@ -46,12 +48,13 @@ module.exports = class RegisterPresetView extends FormView
         .flatMap (form) ->
             if form.autkeys
                 keys = window.crypto.subtle.generateKey
-                    name:           "RSASSA-PKCS1-v1_5"
+                    name:           "RSA-OAEP"
                     modulusLength:  2048
                     publicExponent: new Uint8Array([0x01, 0x00, 0x01])
                     hash:           name: "SHA-256"
                 , true
-                , ["sign", "verify"]
+                , ['encrypt', 'decrypt']
+
                 .then (keypair) ->
                     window.crypto.subtle.exportKey 'jwk', keypair.privateKey
                     .then (keydata) ->
@@ -60,7 +63,18 @@ module.exports = class RegisterPresetView extends FormView
                     window.crypto.subtle.exportKey 'jwk', keypair.publicKey
                     .then (keydata) ->
                         form.pubkey = JSON.stringify keydata
-                        form
+
+                    return keypair
+
+                .then (keypair) ->
+                    window.crypto.subtle.encrypt
+                        name: "RSA-OAEP"
+                    , keypair.publicKey
+                    , btoabuffer.decode btoa form.password
+
+                .then (data) ->
+                    form.authtoken = btoabuffer.encode data
+                    return form
 
                 Bacon.fromPromise keys
             else

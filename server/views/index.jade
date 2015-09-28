@@ -3,9 +3,9 @@ extends layouts/_base
 block title
     title Cozy Cloud
     
-if token
+if authtoken
     block meta
-        meta(name="authtoken", content=token)
+        meta(name="authtoken", content=authtoken)
 
 
 block content

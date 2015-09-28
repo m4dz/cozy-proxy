@@ -38,6 +38,7 @@ module.exports.register = (req, res, next) ->
         activated:   true
         allow_stats: req.body.allow_stats
         pubkey:      pubkey
+        authtoken:   req.body.authtoken
         docType:     "User"
 
     instanceData = locale: req.body.locale
@@ -83,7 +84,7 @@ module.exports.loginIndex = (req, res) ->
                 return word.charAt(0).toUpperCase() + word.slice 1
             ).join ' '
 
-        res.render "index", name: name, token: user.token
+        res.render "index", name: name, authtoken: user.authtoken
 
 
 module.exports.forgotPassword = (req, res, next) ->

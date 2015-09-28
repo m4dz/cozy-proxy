@@ -1,7 +1,6 @@
 americano = require 'americano-cozy'
 Client    = require('request-json').JsonClient
 jwkToPem  = require 'jwk-to-pem'
-NodeRSA   = require 'node-rsa'
 
 helpers      = require '../lib/helpers'
 timezones    = require '../lib/timezones'
@@ -21,7 +20,7 @@ module.exports = User = americano.getModel 'User',
     owner: Boolean
     allow_stats: Boolean
     pubkey: String
-    token: String
+    authtoken: String
     activated: Boolean
 
 User.createNew = (data, callback) ->
@@ -60,8 +59,6 @@ User.validate = (data, errors = {}) ->
 
     if data.pubkey
         data.pubkey = jwkToPem data.pubkey
-        key = NodeRSA data.pubkey
-        data.token = key.encrypt data.password, 'base64'
 
     return errors
 
