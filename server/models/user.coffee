@@ -1,5 +1,6 @@
 americano = require 'americano-cozy'
 Client    = require('request-json').JsonClient
+jwkToPem  = require 'jwk-to-pem'
 
 helpers      = require '../lib/helpers'
 timezones    = require '../lib/timezones'
@@ -19,6 +20,7 @@ module.exports = User = americano.getModel 'User',
     owner: Boolean
     allow_stats: Boolean
     activated: Boolean
+    pubkey: String
 
 User.createNew = (data, callback) ->
     data.docType = "User"
@@ -53,6 +55,9 @@ User.validate = (data, errors = {}) ->
 
     if not (data.timezone in timezones)
         errors.timezone = localization.t 'invalid timezone'
+
+    if data.pubkey
+        data.pubkey = jwkToPem data.pubkey
 
     return errors
 

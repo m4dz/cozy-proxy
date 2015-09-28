@@ -15,6 +15,8 @@
   "preset name tip": "It's displayed when you share files with people or invite them to events.",
   "preset password": "password",
   "preset password tip": "A strong password of at least 8 characters is required (special characters recommended).",
+  "preset authkeys": "Use authkeys to authenticate against my Cozy",
+  "preset authkeys tip": "Authkeys authentication let you login to your Cozy without entering your password ; your browser will authenticate you by itself.",
   "preset timezone": "timezone",
   "preset timezone tip": "It's needed to properly display your calendar.",
   "preset opt-in help": "Allow Cozy to use my usage stats to improve the product.",
