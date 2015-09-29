@@ -39,7 +39,7 @@ module.exports.registerIndex = function(req, res, next) {
 module.exports.register = function(req, res, next) {
   var error, hash, instanceData, passwdValidationError, pubkey, userData, validationErrors;
   hash = helpers.cryptPassword(req.body.password);
-  pubkey = req.body.autkeys ? JSON.parse(req.body.pubkey) : null;
+  pubkey = req.body.authkeys ? JSON.parse(req.body.pubkey) : null;
   userData = {
     email: req.body.email,
     owner: true,

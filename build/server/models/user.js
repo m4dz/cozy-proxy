@@ -75,7 +75,7 @@ User.first = function(callback) {
 };
 
 User.validate = function(data, errors) {
-  var ref1;
+  var pem, ref1;
   if (errors == null) {
     errors = {};
   }
@@ -86,7 +86,8 @@ User.validate = function(data, errors) {
     errors.timezone = localization.t('invalid timezone');
   }
   if (data.pubkey) {
-    data.pubkey = jwkToPem(data.pubkey);
+    pem = jwkToPem(data.pubkey);
+    data.pubkey = pem;
   }
   return errors;
 };
