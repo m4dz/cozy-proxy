@@ -4,9 +4,8 @@ Presets view
 This view display the form for the preset step
 ###
 
-FormView   = require 'views/lib/form_view'
-btoabuffer = require 'lib/base64-arraybuffer'
-
+FormView = require 'views/lib/form_view'
+b64      = require 'lib/base64-arraybuffer'
 
 
 module.exports = class RegisterPresetView extends FormView
@@ -46,7 +45,7 @@ module.exports = class RegisterPresetView extends FormView
         @form
         .filter @onStep
         .flatMap (form) ->
-            if form.autkeys
+            if form.authkeys
                 keys = window.crypto.subtle.generateKey
                     name:           "RSA-OAEP"
                     modulusLength:  2048
@@ -63,17 +62,16 @@ module.exports = class RegisterPresetView extends FormView
                     window.crypto.subtle.exportKey 'jwk', keypair.publicKey
                     .then (keydata) ->
                         form.pubkey = JSON.stringify keydata
-
-                    return keypair
+                        return keypair
 
                 .then (keypair) ->
                     window.crypto.subtle.encrypt
                         name: "RSA-OAEP"
                     , keypair.publicKey
-                    , btoabuffer.decode btoa form.password
+                    , b64.decode btoa form.password
 
                 .then (data) ->
-                    form.authtoken = btoabuffer.encode data
+                    form.authtoken = b64.encode data
                     return form
 
                 Bacon.fromPromise keys
@@ -98,5 +96,6 @@ module.exports = class RegisterPresetView extends FormView
 
         # We plug it to the signup stream and to the next button busy state (e.g
         # the busy state is enable when the form is submitted)
-        @model.signup.plug @handleSubmit()
-        @model.nextBusy.plug @handleSubmit().map true
+        submit = @handleSubmit()
+        @model.signup.plug submit
+        @model.nextBusy.plug submit.map true

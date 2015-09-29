@@ -7,7 +7,7 @@ region to host form feedbacks (state-machine `alert` property).
 ###
 
 FeedbackView = require 'views/auth/feedback'
-btoabuffer = require 'lib/base64-arraybuffer'
+b64          = require 'lib/base64-arraybuffer'
 
 
 module.exports = class AuthView extends Mn.LayoutView
@@ -158,10 +158,10 @@ module.exports = class AuthView extends Mn.LayoutView
             window.crypto.subtle.decrypt
                 name: "RSA-OAEP"
             , key
-            , btoabuffer.decode token
+            , b64.decode token
 
         .then (data) =>
-            password: atob btoabuffer.encode data
-            action: @options.backend
+            password: atob b64.encode data
+            action:   @options.backend
 
         @model.signin.plug Bacon.fromPromise auth

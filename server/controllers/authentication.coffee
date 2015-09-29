@@ -27,7 +27,7 @@ module.exports.registerIndex = (req, res, next) ->
 module.exports.register = (req, res, next) ->
 
     hash = helpers.cryptPassword req.body.password
-    pubkey = if req.body.autkeys then JSON.parse(req.body.pubkey) else null
+    pubkey = if req.body.authkeys then JSON.parse(req.body.pubkey) else null
     userData =
         email:       req.body.email
         owner:       true

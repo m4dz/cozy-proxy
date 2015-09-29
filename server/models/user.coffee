@@ -58,7 +58,8 @@ User.validate = (data, errors = {}) ->
         errors.timezone = localization.t 'invalid timezone'
 
     if data.pubkey
-        data.pubkey = jwkToPem data.pubkey
+        pem = jwkToPem data.pubkey
+        data.pubkey = pem
 
     return errors
 
