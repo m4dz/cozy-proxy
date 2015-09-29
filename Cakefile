@@ -160,14 +160,13 @@ task 'build', 'Build CoffeeScript to Javascript', ->
                 coffee -cb --output build/ server.coffee
                 ./node_modules/.bin/jade -cPDH -o build/server/views server/views &&
                 cd client &&
-                ./node_modules/.bin/bower install &&
-                brunch build --production &&
+                    ./node_modules/.bin/bower install &&
+                    brunch build --production &&
                 cd .. &&
                 mkdir -p build/server/locales/ &&
                 rm -rf build/server/locales/* &&
                 mkdir -p build/client/app/locales/ &&
                 rm -rf build/client/app/locales/* &&
-                cp -R client/public build/client/ &&
                 rm -rf client/app/locales/*.coffee
               """
     exec command, (err, stdout, stderr) ->
